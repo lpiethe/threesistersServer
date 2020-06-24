@@ -21,6 +21,9 @@ const reviewSchema = new Schema({
     text: {
         type: String,
         required: true
+    },
+    featured: {
+        type: Boolean
     }
 }, {
     timestamps: true
@@ -28,3 +31,4 @@ const reviewSchema = new Schema({
 
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
+

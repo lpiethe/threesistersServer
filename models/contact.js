@@ -7,6 +7,14 @@ const contactSchema = new Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: Number,
+        required: true
+    },
     text: {
         type: String,
         required: true
@@ -15,5 +23,5 @@ const contactSchema = new Schema({
     timestamps: true
 });
 
-const Contact = mongoose.model('Review', contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 module.exports = Contact;

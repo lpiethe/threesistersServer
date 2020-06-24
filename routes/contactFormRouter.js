@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Contact = require('../models/contact');
+const cors = require('./cors');
 
 
 const contactFormRouter = express.Router();
@@ -8,18 +9,38 @@ const contactFormRouter = express.Router();
 contactFormRouter.use(bodyParser.json());
 
 contactFormRouter.route('/')
-.get((req,res,next) => {
-
+.options(cors.corsWithOptions, (req,res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
+    Contact.find()
+    .then(contact => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'applicaiton/json');
+        res.json(contact);
+    })
+        .catch(err => next(err));
 })
-.post((req,res) => {
-    res.statusCode = 200;
-    res.end('we have sent the contact info to you!');
+.post(cors.corsWithOptions, (req,res, next) => {
+    Contact.create(req.body)
+    .then(contact => {
+        console.log('Review Created', contact);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json')
+        res.json(contact);
+    })
+    .catch(err => next(err));
 })
-.put((req,res,next) => {
-
+.put(cors.corsWithOptions, (req,res,next) => {
+    res.statusCode = 403;
+    res.end('PUT not supported on /contact');
 })
-.delete((req,res,next) => {
-    
+.delete(cors.corsWithOptions, (req,res,next) => {
+    Contact.deleteMany()
+    .then(response => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
+    })
+  .catch(err => next(err));
 })
 
 
